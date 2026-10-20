@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>A Última P1</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="stage">
+  <canvas id="game" width="640" height="360" aria-label="Arena do jogo"></canvas>
+
+  <div id="vignette"></div>
+  <div id="lowHp"></div>
+  <div id="scanlines"></div>
+  <div id="damageFlash"></div>
+
+  <div id="hud" class="hidden">
+    <div class="player-hud">
+      <div class="hud-name">PEDRO</div>
+      <div class="bar player-bar">
+        <div class="bar-ghost" id="playerHpGhost"></div>
+        <div class="bar-fill" id="playerHpFill"></div>
+      </div>
+      <div class="flask-row" id="flaskRow" aria-label="Curas restantes"></div>
+    </div>
+
+    <div class="boss-hud" id="bossHud">
+      <div class="boss-name" id="bossName">PROFESSOR DABOIT</div>
+      <div class="bar boss-bar">
+        <div class="bar-ghost" id="bossHpGhost"></div>
+        <div class="bar-fill boss-fill" id="bossHpFill"></div>
+      </div>
+    </div>
+
+    <div class="controls-hint" id="controlsHint">WASD mover &middot; J atacar &middot; ESPAÇO rolar &middot; E curar</div>
+  </div>
+
+  <div id="titleScreen" class="overlay">
+    <div class="title-block">
+      <div class="kicker">UM SOULSLIKE DA FACULDADE VAZIA</div>
+      <h1>A ÚLTIMA <span>P1</span></h1>
+      <p class="flavor">Pedro só quer a nota. O professor Daboit só quer surfar.<br>Um deles vai sair da sala de aula de pé.</p>
+      <div class="start-line only-pc"><span class="key">ENTER</span> começar</div>
+      <div class="start-line only-touch">TOQUE PARA COMEÇAR</div>
+      <div class="controls only-pc">
+        <div><span class="key">WASD</span> mover</div>
+        <div><span class="key">J</span> golpe de claymore</div>
+        <div><span class="key">ESPAÇO</span> rolar (invulnerável)</div>
+        <div><span class="key">E</span> beber cura (5)</div>
+        <div><span class="key">P</span> pausar &middot; <span class="key">M</span> som</div>
+      </div>
+      <div class="controls only-touch">
+        <div>ANALÓGICO mover</div>
+        <div>GOLPE atacar</div>
+        <div>ROLAR desviar</div>
+        <div>CURA beber</div>
+      </div>
+      <p class="tip">Dica: o Daboit telegrafa cada ataque. Role <em>para dentro</em> do golpe.</p>
+    </div>
+  </div>
+
+  <div id="deathScreen" class="overlay hidden">
+    <h2 class="death-title">VOCÊ MORREU</h2>
+    <p class="flavor">A P1 continua te esperando.</p>
+    <p class="stats" id="deathStats"></p>
+    <div class="start-line only-pc"><span class="key">R</span> tentar de novo</div>
+    <div class="start-line only-touch">TOQUE PARA TENTAR DE NOVO</div>
+  </div>
+
+  <div id="winScreen" class="overlay hidden">
+    <h2 class="win-title">P1 ENTREGUE</h2>
+    <p class="flavor">O professor Daboit caiu. A nota é sua.</p>
+    <p class="grade" id="winGrade">NOTA: 10,0</p>
+    <p class="stats" id="winStats"></p>
+    <div class="start-line only-pc"><span class="key">R</span> jogar de novo</div>
+    <div class="start-line only-touch">TOQUE PARA JOGAR DE NOVO</div>
+  </div>
+
+  <div id="pauseScreen" class="overlay hidden">
+    <h2 class="pause-title">PAUSADO</h2>
+    <p class="flavor">A aula pode esperar.</p>
+    <div class="start-line only-pc"><span class="key">P</span> continuar</div>
+    <div class="start-line only-touch">TOQUE PARA CONTINUAR</div>
+  </div>
+
+  <div id="touchUI" class="touch-ui" aria-hidden="true">
+    <div id="stickZone" class="stick-zone">
+      <div id="stickBase" class="stick-base"><div id="stickKnob" class="stick-knob"></div></div>
+    </div>
+    <div class="touch-buttons">
+      <button id="btnHeal" class="tbtn heal" type="button" aria-label="Curar">
+        <span class="tbtn-label">CURA</span>
+        <span class="heal-count" id="healCount">5</span>
+      </button>
+      <button id="btnRoll" class="tbtn roll" type="button" aria-label="Rolar">ROLAR</button>
+      <button id="btnAttack" class="tbtn attack" type="button" aria-label="Atacar">GOLPE</button>
+    </div>
+    <button id="btnPause" class="tbtn pause" type="button" aria-label="Pausar">II</button>
+  </div>
+
+  <div id="rotateHint" class="rotate-hint">
+    <div class="rotate-icon">▭</div>
+    <p>Gire o celular para a horizontal</p>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
