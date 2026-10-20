@@ -404,6 +404,20 @@ canvas { touch-action: none; }
 body.touch {
   -webkit-touch-callout: none;
   overscroll-behavior: none;
+  background: radial-gradient(ellipse at 50% 42%, #0b1214 0%, #030506 72%);
+}
+
+body.touch #stage {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+}
+
+body.touch #stage canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: radial-gradient(ellipse at 50% 45%, #0e1719 0%, #050809 72%);
 }
 
 .touch-ui {
@@ -420,7 +434,22 @@ body.touch .only-pc { display: none !important; }
 body.touch .controls.only-touch { display: flex; }
 body.touch .start-line.only-touch { display: block; }
 body.touch .controls-hint { display: none; }
-body.touch .boss-hud { width: 58vw; bottom: 7vh; }
+
+body.touch .player-hud {
+  top: calc(1.4em + env(safe-area-inset-top, 0px));
+  left: calc(1.8em + env(safe-area-inset-left, 0px));
+  width: 19em;
+}
+
+body.touch .boss-hud {
+  width: min(46vw, 34em);
+  bottom: calc(1.8em + env(safe-area-inset-bottom, 0px));
+}
+
+body.touch .boss-name { font-size: 0.82em; }
+body.touch .bar { height: 0.95em; }
+body.touch .flask { width: 1em; height: 1.3em; }
+body.touch .flask-row { gap: 0.3em; margin-top: 0.6em; }
 
 .stick-zone {
   position: absolute;
@@ -434,10 +463,10 @@ body.touch .boss-hud { width: 58vw; bottom: 7vh; }
 
 .stick-base {
   position: absolute;
-  left: 1.8em;
-  bottom: 1.6em;
-  width: 9.4em;
-  height: 9.4em;
+  left: calc(2em + env(safe-area-inset-left, 0px));
+  bottom: calc(1.8em + env(safe-area-inset-bottom, 0px));
+  width: 11em;
+  height: 11em;
   border-radius: 50%;
   border: 1px solid rgba(200, 186, 150, 0.28);
   background:
@@ -450,10 +479,10 @@ body.touch .boss-hud { width: 58vw; bottom: 7vh; }
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 3.8em;
-  height: 3.8em;
-  margin-left: -1.9em;
-  margin-top: -1.9em;
+  width: 4.4em;
+  height: 4.4em;
+  margin-left: -2.2em;
+  margin-top: -2.2em;
   border-radius: 50%;
   border: 1px solid rgba(220, 205, 165, 0.45);
   background: radial-gradient(circle at 40% 35%, rgba(210, 196, 160, 0.34), rgba(35, 38, 38, 0.75));
@@ -463,10 +492,10 @@ body.touch .boss-hud { width: 58vw; bottom: 7vh; }
 
 .touch-buttons {
   position: absolute;
-  right: 1.6em;
-  bottom: 1.4em;
-  width: 18em;
-  height: 14em;
+  right: calc(1.8em + env(safe-area-inset-right, 0px));
+  bottom: calc(1.6em + env(safe-area-inset-bottom, 0px));
+  width: 24em;
+  height: 17em;
   pointer-events: none;
 }
 
@@ -496,25 +525,25 @@ body.touch .boss-hud { width: 58vw; bottom: 7vh; }
 #btnAttack {
   right: 0;
   bottom: 0;
-  width: 6.2em;
-  height: 6.2em;
-  font-size: 1em;
+  width: 7.6em;
+  height: 7.6em;
+  font-size: 1.05em;
 }
 
 #btnRoll {
-  right: 6.8em;
-  bottom: 0.6em;
-  width: 4.8em;
-  height: 4.8em;
-  font-size: 0.82em;
+  right: 8.8em;
+  bottom: 0.8em;
+  width: 6em;
+  height: 6em;
+  font-size: 0.86em;
 }
 
 #btnHeal {
-  right: 2.2em;
-  bottom: 6.9em;
-  width: 4.4em;
-  height: 4.4em;
-  font-size: 0.82em;
+  right: 3.2em;
+  bottom: 9em;
+  width: 5.4em;
+  height: 5.4em;
+  font-size: 0.86em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -543,11 +572,11 @@ body.touch .boss-hud { width: 58vw; bottom: 7vh; }
 
 #btnPause {
   position: absolute;
-  right: 1.4em;
-  top: 1.2em;
-  width: 3em;
-  height: 3em;
-  font-size: 0.82em;
+  right: calc(1.6em + env(safe-area-inset-right, 0px));
+  top: calc(1.4em + env(safe-area-inset-top, 0px));
+  width: 3.6em;
+  height: 3.6em;
+  font-size: 0.9em;
   pointer-events: auto;
   opacity: 0.75;
 }
@@ -565,27 +594,20 @@ body.touch .boss-hud { width: 58vw; bottom: 7vh; }
 
   .controls-hint { display: none; }
 
-  .overlay { padding: 3vh 4vw; }
-  h1 { font-size: 8vh; }
-  .death-title { font-size: 6.6vh; }
-  .win-title { font-size: 6vh; }
-  .flavor { font-size: 1.6vh; margin-top: 2vh; }
-  .kicker { font-size: 1.2vh; }
-  .controls { font-size: 1.1vh; gap: 1vh 2vw; margin-top: 2.6vh; }
-  .start-line { margin-top: 2.6vh; font-size: 1.5vh; }
+  .overlay { padding: 2vh 4vw; }
+  h1 { font-size: 5em; }
+  .death-title { font-size: 4.4em; }
+  .win-title { font-size: 4.2em; }
+  .flavor { font-size: 1.02em; margin-top: 1.1em; }
+  .kicker { font-size: 0.7em; margin-bottom: 0.8em; }
+  .controls { font-size: 0.68em; gap: 0.7em 1.6em; margin-top: 1.4em; }
+  .start-line { margin-top: 1.5em; font-size: 0.9em; }
   .tip { display: none; }
-  .pause-title { font-size: 5vh; }
-  .grade { font-size: 3.2vh; margin-top: 2vh; }
-  .stats { font-size: 1.3vh; margin-top: 2vh; }
+  .pause-title { font-size: 3.2em; }
+  .grade { font-size: 2em; margin-top: 0.9em; }
+  .stats { font-size: 0.75em; margin-top: 1em; }
 
-  .player-hud { top: 2.2vh; left: 2.4vw; width: 34vw; }
-  .boss-hud { width: 62vw; bottom: 4.4vh; }
-  .hud-name, .boss-name { font-size: 1.5vh; }
-  .bar { height: 1.8vh; }
-  .flask { width: 1.6vh; height: 2.1vh; }
-  .flask-row { gap: 0.6vh; margin-top: 1.2vh; }
-
-  .toast { top: 14%; font-size: 2vh; }
+  .toast { top: 13%; font-size: 1em; white-space: normal; width: 80vw; text-align: center; }
 }
 
 @media (pointer: coarse) and (orientation: portrait) {

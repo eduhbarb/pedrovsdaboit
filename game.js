@@ -73,6 +73,37 @@
   window.addEventListener('resize', fitStage);
   fitStage();
 
+  let fsPending = false;
+  function tryFullscreen() {
+    if (!isTouch) return;
+    try {
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (!isFs && !fsPending) {
+        const el = document.documentElement;
+        const req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) {
+          fsPending = true;
+          const isWebkit = !el.requestFullscreen && !!el.webkitRequestFullscreen;
+          const p = isWebkit ? req.call(el) : req.call(el, { navigationUI: 'hide' });
+          if (p && p.catch) p.catch(() => { fsPending = false; });
+          else fsPending = false;
+        }
+      }
+      if (screen.orientation && screen.orientation.lock) {
+        const lp = screen.orientation.lock('landscape');
+        if (lp && lp.catch) lp.catch(() => {});
+      }
+    } catch (e) {
+      fsPending = false;
+    }
+  }
+  const onFullscreenChange = () => {
+    fsPending = false;
+    setTimeout(fitStage, 120);
+  };
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+
   // ---------------- Áudio ----------------
   const AudioSys = (() => {
     let ac = null, master = null, drone = null, muted = false, noiseBuf = null;
@@ -280,6 +311,7 @@
     setHudVisible(true);
     bossHud.classList.remove('phase2');
     AudioSys.init();
+    tryFullscreen();
     showToast('PROFESSOR DABOIT BLOQUEIA A SAÍDA', 2200);
   }
 
@@ -685,6 +717,10 @@
   });
   canvas.addEventListener('contextmenu', e => e.preventDefault());
 
+  stage.addEventListener('pointerdown', () => {
+    if (isTouch) tryFullscreen();
+  }, { passive: true });
+
   // ---------------- Touch ----------------
   let stickId = null;
   let stickCenter = { x: 0, y: 0 };
@@ -779,9 +815,14 @@
     const onOrient = () => {
       resetTouchInput();
       if (portraitMQ.matches && game.mode === 'playing' && !game.paused) togglePause();
+      setTimeout(() => {
+        tryFullscreen();
+        fitStage();
+      }, 260);
     };
     if (portraitMQ.addEventListener) portraitMQ.addEventListener('change', onOrient);
     else if (portraitMQ.addListener) portraitMQ.addListener(onOrient);
+    window.addEventListener('orientationchange', onOrient);
   }
 
   window.addEventListener('blur', resetTouchInput);
